@@ -3,27 +3,19 @@ import { Logout } from "@/features/logout";
 import { userIdState } from "@/shared/api";
 import { Fallback } from "@/shared/ui/fallback";
 import { useHookstate } from "@hookstate/core";
-import { useState, useTransition, type ReactNode } from "react";
+import { useState, useTransition } from "react";
 import { BiHome, BiMenu } from "react-icons/bi";
-import { Link, Outlet, useLocation, useNavigate, useParams, type To } from "react-router";
-import { RiCustomerService2Line } from "react-icons/ri";
+import { Link, Outlet, useNavigate, type To } from "react-router";
 import { FaUsers } from "react-icons/fa6";
-import { FaTags, FaArrowLeft } from "react-icons/fa6";
-
-function MenuLink({ to, label, icon, go }: { to: To, label: string, icon: ReactNode, go: (link: To) => void }) {
-  const location = useLocation();
-  const { campaignId } = useParams();
-  const resultLink = '/' + campaignId + to;
-
-  return (
-    <li onClick={() => go(resultLink)}>
-      <a className={location.pathname === resultLink ? 'menu-active' : ''}>
-      <div className="w-[16px]">{icon}</div>
-        {label}
-      </a>
-    </li>
-  )
-}
+import { FaArrowLeft } from "react-icons/fa6";
+import { MenuLink } from "./MenuLink";
+import { IoIosStarHalf } from "react-icons/io";
+import { FaListCheck } from "react-icons/fa6";
+import { IoChatbubbles } from "react-icons/io5";
+import { FaHistory } from "react-icons/fa";
+import { FaPalette } from "react-icons/fa";
+import { BiSolidBinoculars } from "react-icons/bi";
+import { Header } from "@/widgets/header";
 
 export function Layout() {
   const [open, setOpen] = useState(true);
@@ -47,16 +39,10 @@ export function Layout() {
           </div>
           <ul className="menu w-full flex-1 h-full">
             <MenuLink
-              to=""
+              to="/"
               go={go}
               icon={<BiHome />}
               label="Главная"
-            />
-            <MenuLink
-              to="/channels"
-              go={go}
-              icon={<RiCustomerService2Line />}
-              label="Каналы"
             />
             <MenuLink
               to="/operators"
@@ -67,27 +53,48 @@ export function Layout() {
             <MenuLink
               to="/tags"
               go={go}
-              icon={<FaTags />}
-              label="Теги"
+              icon={<IoChatbubbles />}
+              label="Мессенджер"
+            />
+            <MenuLink
+              to="/operators"
+              go={go}
+              icon={<BiSolidBinoculars />}
+              label="Посетители"
+            />
+            <MenuLink
+              to="/tags"
+              go={go}
+              icon={<FaListCheck />}
+              label="Анкеты"
+            />
+            <MenuLink
+              to="/tags"
+              go={go}
+              icon={<IoIosStarHalf />}
+              label="Оценки качества"
+            />
+            <MenuLink
+              to="/tags"
+              go={go}
+              icon={<FaHistory />}
+              label="История действий"
+            />
+            <MenuLink
+              to="/tags"
+              go={go}
+              icon={<FaPalette />}
+              label="Контент"
             />
           </ul>
-          <Link to={"/select-campaign/" + userId} className="btn btn-outline btn-primary mb-2">
+          <Link to={"/select-channel/" + userId} className="btn btn-outline btn-primary mb-2">
             <FaArrowLeft size={15} />
-            Другая кампания
+            Другой канал
           </Link>
-          <Logout />
         </div>
       )}
       <div className={"flex flex-col h-full " + (open ? 'w-[calc(100%-250px)]' : 'w-full')}>
-        <div className="w-full flex flex-row justify-between items-center py-3 px-5">
-          <button onClick={() => setOpen(!open)} className="btn btn-square btn-ghost btn-sm">
-            <BiMenu size={20} />
-          </button>
-          <Link to={"/user/" + userId} className="flex flex-row items-center gap-2">
-            <Name />
-            <Avatar className="w-[30px] h-[30px] rounded-full object-center object-cover" />
-          </Link>
-        </div>
+        <Header open={open} setOpen={setOpen} />
         <div className="flex-1 h-full overflow-auto w-full pb-10">
           {pending && <Fallback />}
           {!pending && <Outlet />}

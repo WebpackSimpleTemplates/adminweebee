@@ -1,9 +1,22 @@
-import { Fallback } from '@/shared/ui/fallback';
+import { agent } from '@/shared/api';
 import { useEffect, useState } from 'react';
+import { redirect } from 'react-router';
 
 export { Layout as default } from './Layout';
 
-export const HydrateFallback = () => <Fallback />;
+export const loader = async ({ params: { channelId } }: { params: { channelId: string } }) => {
+  if (isNaN(+channelId)) {
+    return redirect('/');
+  }
+
+  const channel = await agent.get(`/channels/${channelId}?populate=owner,logo`).then((res) => res.data);
+
+  if (channel.owner.id !== localStorage.getItem('userId')) {
+    return redirect('/');
+  }
+
+  return channel;
+}
 
 export function ErrorBoundary({ error }) {
   const [show, setShow] = useState(false);

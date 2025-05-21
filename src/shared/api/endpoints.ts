@@ -24,6 +24,6 @@ export type Campaign = {
 
 export function useSelfInfo() {
   return useQuery<UserType>('user-info', () => (
-    agent.get('/users/me?populate=avatar').then((res) => res.data)
+    agent.get('/users/me').then((res) => res.data)
   ));
 }

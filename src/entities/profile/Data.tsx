@@ -12,7 +12,7 @@ export function Avatar(props: Omit<React.ComponentProps<'img'>, 'src'>) {
 }
 
 export function Name() {
-  const { data: { username, displayName } = {} } = useSelfInfo();
+  const { data: { username } = {} } = useSelfInfo();
 
-  return <>{displayName || username}</>;
+  return <>{username}</>;
 }

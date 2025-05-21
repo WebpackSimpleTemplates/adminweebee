@@ -13,7 +13,7 @@ export function LoginForm() {
       const res = await agent.post('/auth/local', { identifier, password }).then((res) => res.data);
 
       saveAuthCredentials(res);
-      await navigate('/select-campaign/' + res.user.id);
+      await navigate('/redirect-campaign/' + res.user.id);
 
       return { identifier, password, error: false };
     } catch (error) {
